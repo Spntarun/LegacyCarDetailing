@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0E0F10;
+  --color-bone: #EDE8DF;
+  --color-signal: #FF4D1C;
+
+  --font-display: 'Fraunces', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+:root {
+  background-color: #0E0F10;
+  color: #EDE8DF;
+}
+
+html, body {
+  background-color: #0E0F10;
+  color: #EDE8DF;
+  font-family: 'DM Sans', sans-serif;
+  scroll-behavior: auto;
+}
+
+/* Lenis smooth scrolling defaults */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Clean minimal scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0E0F10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A2C2E;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF4D1C;
+}
+
+/* Monospace spec labels */
+.spec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Custom interactive cursor on desktop */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-dot {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background-color: #FF4D1C;
+    border-radius: 50%;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+  }
+
+  .cursor-dot.cursor-hover {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 77, 28, 0.85);
+    mix-blend-mode: difference;
+  }
+}

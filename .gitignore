@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Production build output
+dist/
+
+# Scratch & test dumps
+scratch/
+test-*.js
+
+# Environment & logs
+*.log
+.DS_Store
+Thumbs.db
