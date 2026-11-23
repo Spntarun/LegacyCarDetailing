@@ -16,27 +16,27 @@ function calculateStageStyle(stage, p) {
     } else if (p < scrollEnd) {
       const exitRatio = 1 - (p - 0.12) / (scrollEnd - 0.12);
       const opacity = Math.max(0, Math.min(1, exitRatio));
-      const translateY = (1 - opacity) * -20;
+      const translateY = (1 - opacity) * -24;
       return {
         opacity,
         translateY,
         pointerEvents: opacity > 0.2 ? 'auto' : 'none',
       };
     } else {
-      return { opacity: 0, translateY: -20, pointerEvents: 'none' };
+      return { opacity: 0, translateY: -24, pointerEvents: 'none' };
     }
   }
 
   // Stage 5 (Showroom Reveal): Fades in around 0.82 and remains visible
   if (id === 'showroom-reveal') {
     if (p < scrollStart) {
-      return { opacity: 0, translateY: 20, pointerEvents: 'none' };
+      return { opacity: 0, translateY: 24, pointerEvents: 'none' };
     } else if (p >= 0.88) {
       return { opacity: 1, translateY: 0, pointerEvents: 'auto' };
     } else {
       const enterRatio = (p - scrollStart) / (0.88 - scrollStart);
       const opacity = Math.max(0, Math.min(1, enterRatio));
-      const translateY = (1 - opacity) * 20;
+      const translateY = (1 - opacity) * 24;
       return {
         opacity,
         translateY,
@@ -59,10 +59,10 @@ function calculateStageStyle(stage, p) {
 
   if (p < enterEnd) {
     opacity = (p - scrollStart) / (enterEnd - scrollStart);
-    translateY = (1 - opacity) * 16;
+    translateY = (1 - opacity) * 20;
   } else if (p > exitStart) {
     opacity = (scrollEnd - p) / (scrollEnd - exitStart);
-    translateY = (1 - opacity) * -16;
+    translateY = (1 - opacity) * -20;
   }
 
   const clampedOpacity = Math.max(0, Math.min(1, opacity));
@@ -364,10 +364,10 @@ export default function ScrollStoryCanvas({
         const dirtPercent = Math.max(0, Math.min(100, Math.round((1 - p) * 100)));
         if (dirtLevelTextRef.current) {
           dirtLevelTextRef.current.innerText = `${dirtPercent}%`;
-          if (dirtPercent <= 10) {
+          if (dirtPercent <= 15) {
             dirtLevelTextRef.current.style.color = '#EDE8DF';
-          } else if (dirtPercent <= 50) {
-            dirtLevelTextRef.current.style.color = '#FF4D1C';
+          } else if (dirtPercent <= 60) {
+            dirtLevelTextRef.current.style.color = '#C9A24B';
           } else {
             dirtLevelTextRef.current.style.color = '#EDE8DF';
           }
@@ -392,10 +392,10 @@ export default function ScrollStoryCanvas({
           if (!tick) return;
           const isActive = p >= stage.scrollStart && p <= stage.scrollEnd;
           if (isActive) {
-            tick.style.backgroundColor = '#FF4D1C';
-            tick.style.transform = 'scaleX(1.8)';
+            tick.style.backgroundColor = '#C9A24B';
+            tick.style.transform = 'scaleX(2)';
           } else {
-            tick.style.backgroundColor = 'rgba(237, 232, 223, 0.3)';
+            tick.style.backgroundColor = 'rgba(237, 232, 223, 0.25)';
             tick.style.transform = 'scaleX(1)';
           }
         });
@@ -410,21 +410,21 @@ export default function ScrollStoryCanvas({
   // Positioning editorial captions pinned to screen edges, never overlapping car center
   const getCaptionClasses = (position, stageId) => {
     if (stageId === 'hero') {
-      return 'left-6 sm:left-16 md:left-24 bottom-24 sm:bottom-16 max-w-lg';
+      return 'left-6 sm:left-14 md:left-20 bottom-24 sm:bottom-20 max-w-xl';
     }
     if (stageId === 'showroom-reveal') {
-      return 'left-6 sm:left-16 md:left-24 bottom-24 sm:bottom-16 max-w-lg';
+      return 'left-6 sm:left-14 md:left-20 bottom-24 sm:bottom-20 max-w-xl';
     }
 
     switch (position) {
       case 'right-top':
-        return 'right-6 sm:right-16 md:right-24 top-24 sm:top-28 md:top-36 max-w-sm sm:max-w-md text-right';
+        return 'right-6 sm:right-14 md:right-20 top-24 sm:top-28 md:top-36 max-w-sm sm:max-w-md text-right';
       case 'left-top':
-        return 'left-6 sm:left-16 md:left-24 top-24 sm:top-28 md:top-36 max-w-sm sm:max-w-md text-left';
+        return 'left-6 sm:left-14 md:left-20 top-24 sm:top-28 md:top-36 max-w-sm sm:max-w-md text-left';
       case 'right-bottom':
-        return 'right-6 sm:right-16 md:right-24 bottom-28 sm:bottom-24 max-w-sm sm:max-w-md text-right';
+        return 'right-6 sm:right-14 md:right-20 bottom-28 sm:bottom-24 max-w-sm sm:max-w-md text-right';
       case 'left-bottom':
-        return 'left-6 sm:left-16 md:left-24 bottom-28 sm:bottom-24 max-w-sm sm:max-w-md text-left';
+        return 'left-6 sm:left-14 md:left-20 bottom-28 sm:bottom-24 max-w-sm sm:max-w-md text-left';
       default:
         return 'left-6 bottom-24 max-w-md';
     }
@@ -433,27 +433,41 @@ export default function ScrollStoryCanvas({
   // Reduced motion alternative
   if (prefersReducedMotion) {
     return (
-      <section id="story-section" className="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 px-4 bg-[#0E0F10] text-[#EDE8DF]">
-        <div className="max-w-4xl w-full text-center mb-8">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#FF4D1C] mb-3 block">
-            [ BEFORE & AFTER INSPECTION ]
+      <section id="story-section" className="relative min-h-[90vh] flex flex-col items-center justify-center pt-24 px-4 bg-[#0B0B0D] text-[#EDE8DF]">
+        <div className="max-w-4xl w-full text-center mb-10 flex flex-col items-center">
+          <img
+            src="/assets/logo.webp"
+            alt="Legacy Car Detailing Studio"
+            className="w-40 sm:w-48 mb-6 object-contain filter drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]"
+          />
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#C9A24B] mb-3 block">
+            [ COMPARISON & RESTORATION INSPECTION ]
           </span>
-          <h1 className="font-display font-normal text-4xl sm:text-6xl text-[#EDE8DF] mb-3">
-            Dolphin Car <span className="italic text-[#FF4D1C]">Spa</span>
+          <h1 className="font-display font-light text-4xl sm:text-6xl text-[#EDE8DF] tracking-tight mb-3">
+            Legacy Car Detailing <span className="italic font-light text-[#C9A24B]">Studio</span>
           </h1>
-          <p className="font-mono text-xs sm:text-sm text-[#EDE8DF]/70 max-w-md mx-auto">
-            {siteConfig.business.tagline} Drag slider to compare arrival mud with finished luster.
+          <p className="font-body text-sm sm:text-base text-[#EDE8DF]/90 max-w-lg mx-auto font-light leading-relaxed mb-2">
+            {siteConfig.business.tagline}
           </p>
+          <div className="flex flex-wrap justify-center items-center gap-2 font-mono text-xs text-[#C9A24B] uppercase tracking-wider mb-6">
+            <span>PPF</span>
+            <span className="text-[#EDE8DF]/30">|</span>
+            <span>Ceramic Coating</span>
+            <span className="text-[#EDE8DF]/30">|</span>
+            <span>Sun Films</span>
+            <span className="text-[#EDE8DF]/30">|</span>
+            <span>Wraps</span>
+          </div>
         </div>
 
-        <div className="relative w-full max-w-4xl aspect-video overflow-hidden border border-[#EDE8DF]/20 select-none">
+        <div className="relative w-full max-w-4xl aspect-video overflow-hidden border border-[#EDE8DF]/15 select-none shadow-2xl">
           <img
             src="/assets/frames/frame_0150.webp"
             alt="Spotless Showroom Finish"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute top-4 right-4 z-10 px-2 py-1 bg-[#0E0F10] text-[10px] font-mono uppercase tracking-widest text-[#EDE8DF] border border-[#EDE8DF]/30">
-            SHOWROOM
+          <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-[#0B0B0D]/90 text-[10px] font-mono uppercase tracking-[0.2em] text-[#EDE8DF] border border-[#EDE8DF]/20">
+            SHOWROOM FINISH
           </div>
 
           <div
@@ -462,20 +476,20 @@ export default function ScrollStoryCanvas({
           >
             <img
               src="/assets/frames/frame_0001.webp"
-              alt="Dirty Car Arrival"
+              alt="Arrival Dirt & Road Residue"
               className="absolute inset-0 w-full h-full object-cover max-w-none"
               style={{ width: '100%', height: '100%' }}
             />
-            <div className="absolute top-4 left-4 z-10 px-2 py-1 bg-[#0E0F10] text-[10px] font-mono uppercase tracking-widest text-[#FF4D1C] border border-[#FF4D1C]/50">
-              DIRTY ARRIVAL
+            <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-[#0B0B0D]/90 text-[10px] font-mono uppercase tracking-[0.2em] text-[#C9A24B] border border-[#C9A24B]/30">
+              ARRIVAL STATE
             </div>
           </div>
 
           <div
-            className="absolute top-0 bottom-0 w-0.5 bg-[#FF4D1C] z-20"
+            className="absolute top-0 bottom-0 w-0.5 bg-[#C9A24B] z-20"
             style={{ left: `${comparisonSliderPos}%` }}
           >
-            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-7 h-7 bg-[#0E0F10] border border-[#FF4D1C] flex items-center justify-center text-[#FF4D1C] font-mono text-xs">
+            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 bg-[#0B0B0D] border border-[#C9A24B] flex items-center justify-center text-[#C9A24B] font-mono text-xs shadow-lg">
               ↔
             </div>
           </div>
@@ -487,22 +501,22 @@ export default function ScrollStoryCanvas({
             value={comparisonSliderPos}
             onChange={(e) => setComparisonSliderPos(e.target.value)}
             className="absolute inset-0 opacity-0 cursor-ew-resize z-30 w-full h-full"
-            aria-label="Before and After car clean comparison slider"
+            aria-label="Before and after vehicle finish inspection slider"
           />
         </div>
 
-        <div className="mt-8 flex gap-4">
+        <div className="mt-10 flex gap-4">
           <a
             href={siteConfig.business.telLink}
-            className="px-6 py-3 bg-[#FF4D1C] text-[#0E0F10] font-mono text-xs uppercase tracking-wider font-semibold hover:bg-white transition-colors"
+            className="px-8 py-3.5 bg-[#C9A24B] text-[#0B0B0D] font-mono text-xs uppercase tracking-[0.18em] font-medium hover:bg-white transition-colors"
           >
-            Call {siteConfig.business.phone}
+            Direct Call ({siteConfig.business.phone})
           </a>
           <a
             href="#services"
-            className="px-6 py-3 border border-[#EDE8DF]/40 text-[#EDE8DF] font-mono text-xs uppercase tracking-wider hover:border-[#EDE8DF] transition-colors"
+            className="px-8 py-3.5 border border-[#EDE8DF]/25 text-[#EDE8DF] font-mono text-xs uppercase tracking-[0.18em] hover:border-[#EDE8DF] transition-colors"
           >
-            Service Menu ↓
+            Treatments Menu ↓
           </a>
         </div>
       </section>
@@ -513,22 +527,23 @@ export default function ScrollStoryCanvas({
     <section
       id="story-section"
       ref={containerRef}
-      className="relative w-full h-screen bg-[#0E0F10] overflow-hidden select-none"
+      className="relative w-full h-screen bg-[#0B0B0D] overflow-hidden select-none"
     >
       {/* Full-bleed Car Canvas */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full block object-cover z-0 cursor-default bg-[#0E0F10]"
+        className="absolute inset-0 w-full h-full block object-cover z-0 cursor-default bg-[#0B0B0D]"
       />
 
-      {/* Subtle edge vignette */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0E0F10]/70 via-transparent to-[#0E0F10]/50" />
+      {/* Luxury Radial Vignette & Linear Reading Gradient Fades */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(11,11,13,0.75)_100%)] z-10" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#0B0B0D] via-transparent to-[#0B0B0D]/60 z-10" />
 
       {/* DASHBOARD TELEMETRY RAIL: Left Edge Progress & Live Dirt Level Readout */}
       <div className="hidden sm:flex flex-col items-start absolute left-6 md:left-10 top-1/2 -translate-y-1/2 z-20 pointer-events-none">
         {/* Dirt level title */}
         <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#EDE8DF]/40 mb-2">
-          DIRT LEVEL
+          SURFACE CONTAMINATION
         </span>
 
         {/* Live Dirt Level Percentage Count */}
@@ -539,13 +554,16 @@ export default function ScrollStoryCanvas({
           100%
         </div>
 
-        {/* Vertical Rail with Gauge */}
-        <div className="relative w-0.5 h-44 bg-[#EDE8DF]/15 my-1 ml-1 flex flex-col justify-between">
-          {/* Active Level Fill Line */}
+        {/* Vertical Rail with Hairline Gauge */}
+        <div className="relative w-[1.5px] h-48 bg-[#EDE8DF]/10 my-1 ml-1 flex flex-col justify-between">
+          {/* Active Level Fill Line with Subtle Gold Glow */}
           <div
             ref={dirtBarFillRef}
-            className="absolute top-0 left-0 w-full bg-[#FF4D1C] transition-all duration-75"
-            style={{ height: '100%' }}
+            className="absolute top-0 left-0 w-full bg-[#C9A24B] transition-all duration-75"
+            style={{
+              height: '100%',
+              boxShadow: '0 0 10px rgba(201, 162, 75, 0.45)'
+            }}
           />
 
           {/* 5 Stage Tick Marks */}
@@ -553,17 +571,17 @@ export default function ScrollStoryCanvas({
             <div
               key={stg.id}
               ref={(el) => (railTickRefs.current[i] = el)}
-              className="relative -left-[3px] w-2 h-0.5 bg-[#EDE8DF]/30 origin-left transition-all duration-200"
+              className="relative -left-[3px] w-2 h-[1px] bg-[#EDE8DF]/30 origin-left transition-all duration-200"
             />
           ))}
         </div>
 
-        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#EDE8DF]/30 mt-3">
-          AUTO 01-05
+        <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#EDE8DF]/30 mt-3">
+          CYCLE 01-05
         </span>
       </div>
 
-      {/* 5 EDITORIAL CAPTIONS (Direct typography on screen, no boxes, no cards) */}
+      {/* 5 EDITORIAL CAPTIONS */}
       {siteConfig.stages.map((stage, idx) => {
         const captionClass = getCaptionClasses(stage.position, stage.id);
         const isRight = stage.position.includes('right');
@@ -575,43 +593,62 @@ export default function ScrollStoryCanvas({
             className={`absolute z-20 ${captionClass} will-change-transform will-change-opacity`}
             style={{
               opacity: stage.id === 'hero' ? 1 : 0,
-              transform: stage.id === 'hero' ? 'translate3d(0, 0px, 0)' : 'translate3d(0, 20px, 0)',
+              transform: stage.id === 'hero' ? 'translate3d(0, 0px, 0)' : 'translate3d(0, 24px, 0)',
               pointerEvents: stage.id === 'hero' ? 'auto' : 'none'
             }}
           >
             {stage.id === 'hero' ? (
               /* Hero State */
               <div className="text-left">
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#EDE8DF]/60 mb-3 block">
-                  [{stage.stageTag}]
-                </span>
-                <h1 className="font-display font-normal text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#EDE8DF] leading-[0.95] mb-4">
-                  Dolphin Car <span className="italic text-[#FF4D1C]">Spa</span>
+                <div className="flex items-center space-x-3 mb-4">
+                  <span className="inline-block w-6 h-[1px] bg-[#C9A24B]" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#C9A24B]">
+                    {stage.stageTag}
+                  </span>
+                </div>
+                <h1 className="font-display font-light text-5xl sm:text-7xl md:text-8xl tracking-tight text-[#EDE8DF] leading-[0.98] mb-4">
+                  Legacy Car Detailing <br />
+                  <span className="italic font-light text-[#C9A24B]">Studio</span>
                 </h1>
-                <p className="font-sans text-base sm:text-xl text-[#EDE8DF]/85 max-w-md font-light mb-6">
+                <p className="font-body text-base sm:text-xl text-[#EDE8DF]/90 max-w-md font-light leading-snug mb-3">
                   {stage.tagline}
                 </p>
-                <div className="font-mono text-xs tracking-widest uppercase text-[#EDE8DF]/50 flex items-center space-x-2">
-                  <span>Scroll down to clean</span>
-                  <span className="text-[#FF4D1C]">↓</span>
+                {/* Core Specialties */}
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 font-mono text-[10px] sm:text-xs text-[#C9A24B] uppercase tracking-wider mb-8">
+                  <span className="px-2 py-0.5 border border-[#C9A24B]/30 bg-[#C9A24B]/5">PPF</span>
+                  <span className="text-[#EDE8DF]/30">|</span>
+                  <span className="px-2 py-0.5 border border-[#C9A24B]/30 bg-[#C9A24B]/5">Ceramic Coating</span>
+                  <span className="text-[#EDE8DF]/30">|</span>
+                  <span className="px-2 py-0.5 border border-[#C9A24B]/30 bg-[#C9A24B]/5">Sun Films</span>
+                  <span className="text-[#EDE8DF]/30">|</span>
+                  <span className="px-2 py-0.5 border border-[#C9A24B]/30 bg-[#C9A24B]/5">Wraps</span>
+                </div>
+                {/* Refined Luxury Scroll Cue */}
+                <div className="font-mono text-[11px] tracking-[0.22em] uppercase text-[#EDE8DF]/50 flex items-center space-x-3">
+                  <span className="inline-block w-4 h-[1px] bg-[#EDE8DF]/30" />
+                  <span>Scroll to initiate restoration</span>
+                  <span className="text-[#C9A24B] animate-pulse">↓</span>
                 </div>
               </div>
             ) : stage.id === 'showroom-reveal' ? (
               /* Stage 5: Final Reveal */
               <div className="text-left">
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#FF4D1C] mb-2 block">
-                  [{stage.stageTag} • COMPLETE]
-                </span>
-                <h2 className="font-display font-normal text-3xl sm:text-5xl md:text-6xl text-[#EDE8DF] leading-tight mb-2">
+                <div className="flex items-center space-x-3 mb-3">
+                  <span className="inline-block w-6 h-[1px] bg-[#C9A24B]" />
+                  <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#C9A24B]">
+                    {stage.stageTag} • COMPLETE
+                  </span>
+                </div>
+                <h2 className="font-display font-light text-4xl sm:text-6xl md:text-7xl text-[#EDE8DF] leading-[1.02] mb-3">
                   {stage.title}
                 </h2>
-                <p className="font-sans text-sm sm:text-base text-[#EDE8DF]/80 max-w-md font-light mb-6">
+                <p className="font-body text-sm sm:text-base text-[#EDE8DF]/80 max-w-md font-light leading-relaxed mb-8">
                   {stage.shortLine}
                 </p>
                 <div className="flex flex-wrap items-center gap-4">
                   <a
                     href="#contact"
-                    className="inline-block px-7 py-3.5 bg-[#FF4D1C] text-[#0E0F10] font-mono text-xs uppercase tracking-wider font-semibold rounded-none hover:bg-[#EDE8DF] transition-colors"
+                    className="inline-block px-8 py-3.5 bg-[#C9A24B] text-[#0B0B0D] font-mono text-xs uppercase tracking-[0.18em] font-medium transition-all duration-300 hover:bg-white"
                   >
                     {stage.ctaText} →
                   </a>
@@ -619,22 +656,24 @@ export default function ScrollStoryCanvas({
                     href={siteConfig.business.whatsappLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block px-6 py-3.5 border border-[#EDE8DF]/40 text-[#EDE8DF] font-mono text-xs uppercase tracking-wider hover:border-[#EDE8DF] transition-colors"
+                    className="inline-block px-7 py-3.5 border border-[#EDE8DF]/25 text-[#EDE8DF] font-mono text-xs uppercase tracking-[0.18em] transition-all duration-300 hover:border-[#C9A24B] hover:text-[#C9A24B]"
                   >
-                    WhatsApp
+                    WhatsApp Reservation
                   </a>
                 </div>
               </div>
             ) : (
               /* Stages 2, 3, 4: Pure Editorial Captions */
               <div className={`flex flex-col ${isRight ? 'items-end' : 'items-start'}`}>
-                <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.2em] text-[#EDE8DF]/50 mb-1.5 block">
-                  [{stage.stageTag}]
-                </span>
-                <h2 className="font-display font-normal text-2xl sm:text-4xl md:text-5xl text-[#EDE8DF] leading-tight mb-2">
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-[#C9A24B]">
+                    {stage.stageTag}
+                  </span>
+                </div>
+                <h2 className="font-display font-light text-3xl sm:text-5xl md:text-6xl text-[#EDE8DF] leading-[1.05] mb-2 tracking-tight">
                   {stage.title}
                 </h2>
-                <p className="font-sans text-xs sm:text-sm text-[#EDE8DF]/75 font-light max-w-sm sm:max-w-md leading-relaxed">
+                <p className="font-body text-xs sm:text-sm text-[#EDE8DF]/70 font-light max-w-sm sm:max-w-md leading-relaxed">
                   {stage.shortLine}
                 </p>
               </div>

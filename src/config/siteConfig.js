@@ -1,14 +1,26 @@
 export const siteConfig = {
   business: {
-    name: "Dolphin Car Spa",
-    shortName: "Dolphin",
-    tagline: "Bring it in dirty. Drive it out new.",
-    phone: "8660036822",
-    displayPhone: "86600 36822",
-    telLink: "tel:+918660036822",
-    whatsappLink: "https://wa.me/918660036822?text=Hello%20Dolphin%20Car%20Spa%2C%20I%20would%20like%20to%20book%20a%20service.",
-    address: "Add address here",
-    footerText: "Dolphin Car Spa. Demo site."
+    name: "Legacy Car Detailing Studio",
+    shortName: "Legacy",
+    tagline: "Premium Car Detailing Experts",
+    specialties: "PPF | Ceramic Coating | Sun Films | Wraps",
+    specialtiesList: ["PPF", "Ceramic Coating", "Sun Films", "Wraps"],
+    logo: "/assets/logo.webp",
+    crest: "/assets/logo-crest.webp",
+    phone: "8123543569",
+    displayPhone: "81235 43569",
+    telLink: "tel:+918123543569",
+    whatsappLink: "https://wa.me/918123543569?text=Hello%20Legacy%20Car%20Detailing%20Studio%2C%20I%20would%20like%20to%20inquire%20about%20PPF%20%2F%20Ceramic%20Coating%20%2F%20Sun%20Films%20%2F%20Wraps%20%2F%20Detailing.",
+    address: "Add studio address here",
+    hours: "Monday – Sunday: 08:00 – 20:00",
+    mapLink: "https://maps.google.com/?q=Legacy+Car+Detailing+Studio",
+    closingLine: "Obsessive automotive preservation. Every surface, every millimeter, treated as timeless.",
+    socialLinks: [
+      { name: "Instagram", url: "https://instagram.com" },
+      { name: "YouTube", url: "https://youtube.com" },
+      { name: "WhatsApp", url: "https://wa.me/918123543569" }
+    ],
+    copyrightNotice: "Legacy Car Detailing Studio. All rights reserved."
   },
 
   frames: {
@@ -38,8 +50,9 @@ export const siteConfig = {
       stageNumber: "01 / 05",
       stageTag: "STAGE 01 / 05",
       dirtLevel: 100,
-      title: "Dolphin Car Spa",
-      tagline: "Bring it in dirty. Drive it out new.",
+      title: "Legacy Car Detailing Studio",
+      tagline: "Premium Car Detailing Experts",
+      specialties: "PPF | Ceramic Coating | Sun Films | Wraps",
       shortLine: "Scroll down to start the wash cycle.",
       scrollStart: 0.00,
       scrollEnd: 0.22,
@@ -97,63 +110,87 @@ export const siteConfig = {
     }
   ],
 
-  // Exactly the 8 services in the service menu
+  // Exactly the 8 services in the service menu with optional metadata
   services: [
     {
-      id: "car-wash",
+      id: "ppf-paint-protection",
       num: "01",
-      title: "Car Wash",
-      description: "Touchless deionized pressure rinse and snow foam that treats clear coats with respect.",
-      imageCrop: "/assets/frames/frame_0045.webp"
+      title: "Paint Protection Film (PPF)",
+      description: "Self-healing ultra-clear aliphatic urethane barrier protecting panels against stone chips, scratches, and road fallout.",
+      from: null,
+      duration: null,
+      includes: "Instant Self-Healing, 10-Year Guarantee",
+      imageCrop: "/assets/frames/frame_0150.webp"
     },
     {
-      id: "auto-detailing",
+      id: "ceramic-coating",
       num: "02",
-      title: "Auto Detailing",
-      description: "Complete bumper-to-bumper strip down, arches scrubbed and badges cleaned with soft hair brushes.",
-      imageCrop: "/assets/frames/frame_0070.webp"
-    },
-    {
-      id: "car-polishing",
-      num: "03",
-      title: "Car Polishing",
-      description: "Rotary correction that levels out oxidation, holograms and car-wash spiderweb marks.",
-      imageCrop: "/assets/frames/frame_0080.webp"
-    },
-    {
-      id: "car-waxing",
-      num: "04",
-      title: "Car Waxing",
-      description: "Hand-applied Brazilian carnauba paste for deep water beading and warm, honest luster.",
+      title: "Ceramic Coating",
+      description: "Multi-layer 9H nano-ceramic matrix bonding with clear coat for extreme hydrophobic beading, UV defense, and deep wet-look gloss.",
+      from: null,
+      duration: null,
+      includes: "9H Hardness, Hydrophobic Shield",
       imageCrop: "/assets/frames/frame_0088.webp"
     },
     {
-      id: "car-window-cleaning",
-      num: "05",
-      title: "Car Window Cleaning",
-      description: "Tint-safe de-mineralizing wipe inside and out so oncoming headlights don't scatter glare.",
+      id: "sun-films",
+      num: "03",
+      title: "Sun Films",
+      description: "High-rejection nano-ceramic architectural window films blocking 99% UV rays and maximum infrared heat without signal interference.",
+      from: null,
+      duration: null,
+      includes: "99% UV Rejection, Heat Shield",
       imageCrop: "/assets/frames/frame_0110.webp"
     },
     {
-      id: "clay-bar-treatment",
-      num: "06",
-      title: "Clay Bar Treatment",
-      description: "Specialized synthetic clay shears off brake fallout and rail dust that soaps can't touch.",
-      imageCrop: "/assets/frames/frame_0075.webp"
+      id: "custom-wraps",
+      num: "04",
+      title: "Custom Wraps",
+      description: "Bespoke color transformations, satin/matte conversions, and styling accents applied with flawless edge-wrapped craftsmanship.",
+      from: null,
+      duration: null,
+      includes: "Premium Cast Vinyl, Seamless Edges",
+      imageCrop: "/assets/frames/frame_0070.webp"
     },
     {
-      id: "interior-cleaning",
-      num: "07",
-      title: "Interior Cleaning",
-      description: "Dry steam vapor through the vents, deep extraction on carpets, and not a trace of stale smell.",
+      id: "paint-correction",
+      num: "05",
+      title: "Paint Correction & Polishing",
+      description: "Precision multi-stage rotary cut and jeweling that permanently eliminates swirl marks, scratches, holograms, and paint oxidation.",
+      from: null,
+      duration: null,
+      includes: "Swirl-Free Leveling, High Clarity",
+      imageCrop: "/assets/frames/frame_0080.webp"
+    },
+    {
+      id: "deep-interior-detailing",
+      num: "06",
+      title: "Deep Interior Detailing",
+      description: "Medical-grade dry steam vapor decontamination, deep carpet extraction, and HVAC duct sanitization restoring showroom purity.",
+      from: null,
+      duration: null,
+      includes: "Steam Sanitized, Zero Odor",
       imageCrop: "/assets/frames/frame_0128.webp"
     },
     {
-      id: "leather-suede-cleaning",
-      num: "08",
-      title: "Leather and Suede Cleaning",
-      description: "Gentle pH-neutral conditioner rubbed in by hand; suede brushed up to a factory matte nap.",
+      id: "leather-suede-restoration",
+      num: "07",
+      title: "Leather & Suede Restoration",
+      description: "pH-neutral botanical nourishment and ceramic barrier treatment rubbed by hand, reviving original factory matte nap.",
+      from: null,
+      duration: null,
+      includes: "Matte Finish, UV Nourishment",
       imageCrop: "/assets/frames/frame_0130.webp"
+    },
+    {
+      id: "deionized-hydro-wash",
+      num: "08",
+      title: "Deionized Hydro Wash",
+      description: "Touchless deionized snow-foam wash with filtered 0-TDS water rinse, protecting ceramic coats and delicate clear coat finishes.",
+      from: null,
+      duration: null,
+      includes: "0-TDS Spot-Free, Touchless Foam",
+      imageCrop: "/assets/frames/frame_0045.webp"
     }
   ]
 };

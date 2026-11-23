@@ -1,76 +1,189 @@
-# Dolphin Car Spa — Premium Auto Detailing Single-Page Experience
+# Legacy Car Detailing Studio — Master Technical Architecture & Guide
 
-A luxury, scroll-driven 3D-style single-page web experience built for **Dolphin Car Spa**. As visitors scroll on laptop or mobile devices, the hero vehicle transforms dynamically from mud-covered to showroom spotless, with synchronized stage overlays, fluid 60fps Lenis interpolation, glass-morphism service cards, direct phone/WhatsApp booking integrations, and full accessibility support.
-
----
-
-## 🚀 Live Demo & Tech Stack
-
-- **Framework**: Vite + React 19
-- **Animation & Scrubbing**: GSAP + ScrollTrigger with lerped `requestAnimationFrame` canvas rendering
-- **Smooth Scrolling**: Lenis (`lenis`)
-- **Styling**: Tailwind CSS v4 (Dark Navy `#0A1628`, Cyan Glow `#00D4FF`, Glassmorphism)
-- **Icons**: Lucide React
-- **Media Engine**: FFmpeg WebP sequence generation (Desktop: 1280px / 151 frames; Mobile: 800px / 90 frames)
+A luxury, scroll-driven 3D-style single-page web experience built for **Legacy Car Detailing Studio**. As visitors scroll on laptop or mobile devices, the hero vehicle transforms dynamically from mud-covered arrival to showroom spotless, with synchronized stage overlays, fluid 60fps Lenis interpolation, an editorial 8-treatment service menu, direct phone/WhatsApp booking integrations, and full accessibility support.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Tech Stack & Core Libraries
+
+- **Framework**: [Vite 6](https://vite.dev/) + [React 19](https://react.dev/)
+- **Animation & Scrubbing**: [GSAP 3.12](https://gsap.com/) + ScrollTrigger with lerped `requestAnimationFrame` 2D canvas rendering
+- **Smooth Scrolling**: [Lenis 1.1](https://lenis.darkroom.engineering/) coupled directly with `gsap.ticker`
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) via `@tailwindcss/vite` and `@theme` custom properties
+- **Palette**: Obsidian Ink (`#0B0B0D`), Raised Surface (`#141417`), Hairline Line (`rgba(237,232,223,0.10)`), Warm Bone (`#EDE8DF`), Champagne Gold Accent (`#C9A24B`)
+- **Typography**: Cormorant Garamond (Display Serif), Inter (Body), JetBrains Mono (Technical/Telemetry)
+- **Media Engine**: Dual WebP sequence generation (Desktop: 1280×720 / 151 frames; Mobile: 800×450 / 90 frames)
+- **Testing**: [Playwright](https://playwright.dev/) for automated multi-viewport visual verification
+
+---
+
+## 📁 Project Structure & File Inventory
 
 ```text
 DolphinSPa/
 ├── assets/
-│   ├── DolphinBackdrop.mov       # Source 1080p master video
-│   ├── frames/                   # Desktop 1280px WebP sequence (151 frames)
-│   └── frames_mobile/            # Mobile 800px WebP sequence (90 frames)
+│   ├── DolphinBackdrop.mov       # Source 1080p master video footage
+│   ├── frames/                   # Desktop 1280px WebP sequence (151 frames, frame_0001 to frame_0151)
+│   └── frames_mobile/            # Mobile 800px WebP sequence (90 frames, frame_0001 to frame_0090)
 ├── public/
-│   ├── favicon.svg               # Brand cyan dolphin badge icon
-│   └── assets/                   # Publicly served frame sequences
+│   ├── favicon.svg               # Architectural serif 'L' monogram in champagne gold on #0B0B0D
+│   └── assets/                   # Publicly served frame sequences (synced with assets/)
+│       ├── frames/               # 151 WebP files served at /assets/frames/frame_0001.webp
+│       └── frames_mobile/        # 90 WebP files served at /assets/frames_mobile/frame_0001.webp
 ├── src/
 │   ├── config/
-│   │   └── siteConfig.js         # Single source of truth (all copy, services, timings)
+│   │   └── siteConfig.js         # Single source of truth (business info, frames, 5 stages, 8 services)
 │   ├── components/
-│   │   ├── Navbar.jsx            # Sticky responsive blur/shrink navbar
-│   │   ├── LoadingScreen.jsx     # Dolphin branded 20% threshold progress preloader
-│   │   ├── ScrollStoryCanvas.jsx # Core canvas scrub + video-synced overlays + reduced motion slider
-│   │   ├── ServicesSection.jsx   # 8 glassmorphism cards with responsive grid & stagger animations
-│   │   ├── ContactSection.jsx    # Call Now (8660036822) & WhatsApp booking + footer
-│   │   └── FloatingMobileCTA.jsx # Floating quick-dial & WhatsApp buttons on mobile
-│   ├── App.jsx                   # Lenis + GSAP initialization & root layout
-│   ├── main.jsx                  # React entry point
-│   └── index.css                 # Theme variables, glassmorphism, custom scrollbars
-├── index.html                    # SEO meta tags, Open Graph, Google Fonts (Outfit & Inter)
-├── package.json
-└── vite.config.js
+│   │   ├── Navbar.jsx            # Sticky navigation with mix-blend-mode: difference
+│   │   ├── LoadingScreen.jsx     # High-contrast monospace frame-load preloader (20% interactive threshold)
+│   │   ├── ScrollStoryCanvas.jsx # Core canvas scrub, frame streaming, direct DOM overlays, reduced motion slider
+│   │   ├── ServicesSection.jsx   # Editorial 8-service split list with hover preview & mobile accordion
+│   │   ├── ContactSection.jsx    # Giant serif phone call-to-action (8123543569) & studio information
+│   │   ├── FloatingMobileCTA.jsx # Bottom mobile sticky quick-dial bar
+│   │   └── CustomCursor.jsx      # Magnetic follower cursor on desktop with hover magnification
+│   ├── App.jsx                   # Lenis + GSAP initialization, progress throttling, root layout
+│   ├── main.jsx                  # React 19 mount point (StrictMode)
+│   └── index.css                 # Tailwind v4 @theme, custom palette, typography, Lenis & scrollbar rules
+├── index.html                    # SEO meta tags, Open Graph, Google Fonts (Cormorant Garamond, Inter, JetBrains Mono)
+├── package.json                  # Dependencies and build scripts
+├── vite.config.js                # Vite config (port 3000, @vitejs/plugin-react, @tailwindcss/vite)
+├── test-all-stages.js            # Playwright script testing desktop stages 1 through 5
+├── test-e2e.js                   # End-to-end multi-viewport Playwright verification
+├── test-mobile-stages.js         # Mobile device frame and scroll verification
+└── test-redesign.js              # Visual regression test script
 ```
 
 ---
 
-## 🛠️ How to Swap the Video & Regenerate Frames
+## 🧠 System Architecture & Rendering Pipelines
 
-If you ever wish to replace `assets/DolphinBackdrop.mov` with a new master video:
+### 1. Canvas Video Scrubbing Engine (`ScrollStoryCanvas.jsx`)
+- **Dual Image Sequences**:
+  - **Desktop**: 151 frames at 1280×720px (`/assets/frames/frame_%04d.webp`).
+  - **Mobile**: 90 frames at 800×450px (`/assets/frames_mobile/frame_%04d.webp`), activated below `768px`.
+- **Chunked Preloading Strategy**:
+  - Loads `frame_0001.webp` immediately and draws the initial canvas cover.
+  - Loads the first **20%** of frames (`interactiveThreshold: 0.20`).
+  - Fires `onInteractiveReady()` as soon as 20% completes, dismissing the `LoadingScreen` without forcing visitors to wait for all 151 frames.
+  - Streams the remaining 80% frames in non-blocking batches of 10 (`setTimeout(loadRemaining, 8)`).
+- **Instant Fallback Algorithm**:
+  - If a user rapidly scrubs past unloaded frames, `drawFrame()` scans backward (and forward) to find the nearest loaded frame, ensuring the canvas never blanks, flashes, or stutters.
+- **Lerped Render Loop**:
+  - The `requestAnimationFrame` loop uses linear interpolation:
+    $$\text{currentFrame} += (\text{targetFrame} - \text{currentFrame}) \times 0.2$$
+  - Redraws occur **only** when `Math.round(currentFrame) !== lastDrawnIndex`.
 
-### 1. Place your new video
-Save the new video file to `assets/DolphinBackdrop.mov` (or update the filename in the commands below).
+### 2. High-Performance Direct DOM Updates (Zero React Re-render Thrashing)
+- During the pinned 400% scroll scrub, ScrollTrigger fires up to 120 times per second.
+- To maintain 60 FPS:
+  - Telemetry gauge text (`dirtLevelTextRef.current.innerText = '...'`)
+  - Telemetry gauge fill bar (`dirtBarFillRef.current.style.height = '...'`)
+  - 5 editorial stage overlays (`overlayRefs.current[idx].style.opacity`, `transform`)
+  are written **directly to DOM element styles and text**, bypassing React state and preventing component re-renders during scrolling.
 
-### 2. Regenerate Desktop & Mobile WebP Sequences using FFmpeg
-Run the following commands in your shell:
+### 3. Lenis Smooth-Scrolling & GSAP Ticker Synchronization
+- Initialized in `App.jsx` with duration `1.2s` and custom cubic easing.
+- Synchronized with ScrollTrigger via `lenis.on('scroll', ScrollTrigger.update)`.
+- Ticked directly inside GSAP's RAF: `gsap.ticker.add((time) => lenis.raf(time * 1000))` with `gsap.ticker.lagSmoothing(0)`.
+
+### 4. Accessibility & Reduced Motion Support
+- Detects `prefers-reduced-motion: reduce`.
+- When enabled:
+  - Bypasses Lenis smooth scrolling.
+  - Skips the pinned 400% canvas scroll track entirely.
+  - Renders an interactive **Before & After split comparison slider** comparing dirty arrival (`frame_0001.webp`) against showroom finish (`frame_0150.webp`).
+
+### 5. Responsive Dual-Viewport Strategy
+- **Desktop (>= 768px)**:
+  - 151-frame high-resolution sequence.
+  - Left-hand telemetry rail with live dirt percentage gauge.
+  - Custom magnetic cursor (`CustomCursor.jsx`) with hover magnification.
+  - Service rows feature a floating preview image following cursor position.
+- **Mobile (< 768px)**:
+  - 90-frame lightweight sequence.
+  - Service rows feature tap-to-expand accordion with inline image crop and direct WhatsApp booking deep-link.
+  - Sticky bottom action bar (`FloatingMobileCTA.jsx`) for instant one-tap calling (`8123543569`).
+
+---
+
+## ✏️ Single Source of Truth: `src/config/siteConfig.js`
+
+All business information, stage text, and service packages are centralized in `src/config/siteConfig.js`:
+
+### 1. Studio Contact & Booking Details
+```javascript
+business: {
+  name: "Legacy Car Detailing Studio",
+  shortName: "Legacy",
+  tagline: "Premium Car Detailing Experts",
+  specialties: "PPF | Ceramic Coating | Sun Films | Wraps",
+  phone: "8123543569",
+  displayPhone: "81235 43569",
+  telLink: "tel:+918123543569",
+  whatsappLink: "https://wa.me/918123543569?text=Hello%20Legacy%20Car%20Detailing%20Studio...",
+  address: "Add studio address here",
+  hours: "Monday – Sunday: 08:00 – 20:00"
+}
+```
+
+### 2. The 5 Editorial Stages & Scroll Ranges
+Calibrated directly to the vehicle video footage:
+1. **Hero**: `0.00 - 0.22` (Dirty car arrival & headlights)
+2. **Car Wash**: `0.24 - 0.43` (Touchless foam wash & high-pressure rinse)
+3. **Clay Bar, Polishing & Waxing**: `0.45 - 0.61` (Rotary swirl removal & carnauba application)
+4. **Windows, Interior, Leather & Suede**: `0.63 - 0.81` (Streak-free glass & cabin rejuvenation)
+5. **Showroom Finish**: `0.83 - 1.00` (Gleaming mirror reflection & booking CTA)
+
+### 3. The 8 Signature Protocols (Service Menu)
+Each treatment in `services` contains:
+- `id`: Unique kebab-case slug (e.g. `"ppf-paint-protection"`, `"ceramic-coating"`)
+- `num`: Display index (`"01"` to `"08"`)
+- `title`: Service title:
+  1. **Paint Protection Film (PPF)** — Self-healing urethane shield
+  2. **Ceramic Coating** — Multi-layer 9H nano-quartz matrix
+  3. **Sun Films** — High heat-rejection nano-ceramic window films
+  4. **Custom Wraps** — Bespoke color change vinyl & styling
+  5. **Paint Correction & Polishing** — Swirl-free rotary correction
+  6. **Deep Interior Detailing** — Dry steam vapor decontamination
+  7. **Leather & Suede Restoration** — Factory matte nap rejuvenation
+  8. **Deionized Hydro Wash** — 0-TDS spot-free snow foam wash
+- `description`: Editorial service description
+- `imageCrop`: Frame crop preview path (`/assets/frames/frame_0150.webp`)
+
+---
+
+## 🛠️ How to Swap the Master Video & Regenerate Frames
+
+If replacing `assets/DolphinBackdrop.mov` with a new master video:
+
+### 1. Place the Master Video
+Save the video file to `assets/DolphinBackdrop.mov` (or update filenames accordingly).
+
+### 2. Extract WebP Sequences with FFmpeg
+Run the following commands:
 
 ```bash
-# 1. Desktop sequence (~150 frames, 1280px wide WebP, 82 quality)
+# 1. Desktop sequence (~150 frames, 1280px wide WebP, quality 82)
 ffmpeg -y -i assets/DolphinBackdrop.mov -vf "fps=8,scale=1280:-1" -c:v libwebp -quality 82 assets/frames/frame_%04d.webp
 
-# 2. Mobile lightweight sequence (~90 frames, 800px wide WebP, 75 quality)
+# 2. Mobile lightweight sequence (~90 frames, 800px wide WebP, quality 75)
 ffmpeg -y -i assets/DolphinBackdrop.mov -vf "fps=4.76,scale=800:-1" -c:v libwebp -quality 75 assets/frames_mobile/frame_%04d.webp
-
-# 3. Sync frames to the public distribution folder
-cp -r assets/frames public/assets/
-cp -r assets/frames_mobile public/assets/
 ```
-*(On Windows PowerShell, use `Copy-Item -Recurse -Force assets/frames public/assets/` and `Copy-Item -Recurse -Force assets/frames_mobile public/assets/`)*
 
-### 3. Update Frame Counts in Config (if different)
-In `src/config/siteConfig.js`, adjust the `total` counts to match the newly generated frames:
+### 3. Sync to Public Distribution Folder
+- **PowerShell (Windows)**:
+  ```powershell
+  Copy-Item -Recurse -Force assets\frames public\assets\
+  Copy-Item -Recurse -Force assets\frames_mobile public\assets\
+  ```
+- **Bash (macOS / Linux)**:
+  ```bash
+  cp -r assets/frames public/assets/
+  cp -r assets/frames_mobile public/assets/
+  ```
+
+### 4. Update Frame Counts in Config (if different)
+In `src/config/siteConfig.js`, adjust the `total` counts to match the generated frame count:
 ```javascript
 frames: {
   desktop: {
@@ -86,85 +199,54 @@ frames: {
 
 ---
 
-## ✏️ How to Edit Text, Overlays, and Services
+## 🛡️ Critical Rules for Flawless Future Editing
 
-All business information, stage text, and the 8 service packages are centralized in a single configuration file:
-👉 **[`src/config/siteConfig.js`](file:///T:/DolphinSPa/src/config/siteConfig.js)**
-
-### Editing Business Contact Info:
-```javascript
-business: {
-  name: "Dolphin Car Spa",
-  tagline: "Where every car shines.",
-  phone: "8660036822",
-  displayPhone: "+91 86600 36822",
-  telLink: "tel:+918660036822",
-  whatsappLink: "https://wa.me/918660036822",
-  hours: "Mon – Sun: 8:00 AM – 8:00 PM"
-}
-```
-
-### Editing the 5 Scroll Stages & Video Timings:
-Each stage in `siteConfig.stages` contains `scrollStart`, `scrollEnd`, `title`, and `shortLine`. Overlays have been calibrated to the real visual footage:
-1. **Hero**: 0% - 22% (Dirty car arrival & headlights)
-2. **Car Wash**: 24% - 43% (Foam wash & high pressure rinse)
-3. **Clay Bar, Polishing and Waxing**: 45% - 61% (Machine swirl removal)
-4. **Windows, Interior, Leather and Suede**: 63% - 81% (Streak-free glass & cabin rejuvenation)
-5. **Showroom Finish**: 83% - 100% (Gleaming studio reveal + CTA)
-
-### Editing Services:
-Update or extend the `services` array in `siteConfig.js` to modify titles, descriptions, icons, or feature bullet lists.
+1. **Do NOT introduce React `useState` inside the ScrollTrigger loop**:
+   In `ScrollStoryCanvas.jsx`, updating DOM nodes directly via refs ensures the scroll runs at 60 FPS. Adding React state updates inside `onUpdate` will trigger component re-render loops and cause severe scrolling lag.
+2. **Tailwind v4 Theme Declarations**:
+   Tailwind v4 relies on `@theme` in `src/index.css`. Custom fonts and palette tokens (`--color-ink`, `--color-bone`, `--color-signal`, `--font-display`) must be updated in `src/index.css`.
+3. **Preserve Lenis Anchor Scrolling**:
+   Navigation links scroll smoothly using `el.scrollIntoView({ behavior: 'smooth' })`. Avoid forcing raw `window.scrollTo` without accounting for pinned canvas ScrollTrigger tracks.
+4. **Unified Mobile Breakpoint**:
+   All mobile layout triggers (frame sequence switch, accordion expansion, floating bottom CTA) use `768px` (`md` in Tailwind). Keep all responsive modifications aligned to this breakpoint.
 
 ---
 
-## ⚡ Local Development
+## ⚡ Development & Testing Commands
 
 ```bash
 # Install dependencies
 npm install
 
-# Start local development server (runs on port 3000)
+# Start local dev server (http://localhost:3000)
 npm run dev
 
-# Run automated Playwright tests across Desktop (1440px), Tablet (768px), and Mobile (375px)
-node test-e2e.js
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Automated Playwright Visual Verification:
+node test-all-stages.js     # Captures Desktop stages 1 through 5
+node test-mobile-stages.js  # Captures Mobile stages & service accordion
+node test-e2e.js            # Comprehensive multi-viewport testing (Desktop, Tablet, Mobile)
+node test-redesign.js       # Visual regression suite
 ```
 
 ---
 
-## 🚢 How to Deploy
+## 🚢 Deployment
 
-### Option A: Vercel (Recommended)
-1. Push this project to GitHub / GitLab / Bitbucket.
-2. In [Vercel](https://vercel.com/), click **Add New Project** and select your repository.
-3. Framework Preset: **Vite**
-4. Build Command: `npm run build`
-5. Output Directory: `dist`
-6. Click **Deploy**.
+### Vercel (Recommended)
+1. Push repository to GitHub, GitLab, or Bitbucket.
+2. In Vercel, select **Add New Project** and pick the repository.
+3. Build Command: `npm run build`
+4. Output Directory: `dist`
+5. Click **Deploy**.
 
-*Or via Vercel CLI:*
-```bash
-npm install -g vercel
-vercel
-```
-
-### Option B: Netlify
-1. Log in to [Netlify](https://www.netlify.com/) and click **Add new site** > **Import an existing project**.
-2. Select your repository.
-3. Build command: `npm run build`
-4. Publish directory: `dist`
-5. Click **Deploy site**.
-
-*Or via Netlify CLI:*
-```bash
-npm install -g netlify-cli
-netlify deploy --prod --dir=dist
-```
-
----
-
-## ♿ Accessibility & Performance Highlights
-
-- **`prefers-reduced-motion` Support**: Users requesting reduced motion are automatically served an interactive before/after split comparison slider rather than scroll hijacking.
-- **Progressive Loading**: Interactive threshold set to the first 20% of frames with background chunk streaming, eliminating loading lag.
-- **Responsive Canvas**: Cover-fit canvas scaling keeps the vehicle perfectly centered on iPhone, Android, iPad, laptops, and ultra-wide displays.
+### Netlify
+1. Connect repository in Netlify.
+2. Build Command: `npm run build`
+3. Publish Directory: `dist`
+4. Click **Deploy**.

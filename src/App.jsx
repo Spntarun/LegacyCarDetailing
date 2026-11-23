@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import Navbar from './components/Navbar';
 import LoadingScreen from './components/LoadingScreen';
+import IntroVideo from './components/IntroVideo';
 import ScrollStoryCanvas from './components/ScrollStoryCanvas';
 import ServicesSection from './components/ServicesSection';
 import ContactSection from './components/ContactSection';
@@ -16,6 +17,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function App() {
   const [loadProgress, setLoadProgress] = useState(0);
   const [isInteractive, setIsInteractive] = useState(false);
+  const [isIntroComplete, setIsIntroComplete] = useState(false);
   const lenisRef = useRef(null);
 
   // Throttled progress handler to avoid re-renders
@@ -63,14 +65,20 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0E0F10] text-[#EDE8DF] font-sans selection:bg-[#FF4D1C] selection:text-[#0E0F10]">
-      {/* Custom subtle desktop cursor */}
+    <div className="min-h-screen bg-[#0B0B0D] text-[#EDE8DF] font-body selection:bg-[#C9A24B] selection:text-[#0B0B0D]">
+      {/* 3% Film Grain Atmosphere Overlay */}
+      <div className="film-grain" aria-hidden="true" />
+
+      {/* Luxury custom desktop cursor (dot + soft gold ring) */}
       <CustomCursor />
 
-      {/* Loading Screen until first 20% frames loaded */}
+      {/* Cinematic Fullscreen Intro Video */}
+      <IntroVideo onComplete={() => setIsIntroComplete(true)} />
+
+      {/* Loading Screen until first 20% frames streamed & intro finished */}
       <LoadingScreen
         progress={loadProgress}
-        isInteractive={isInteractive}
+        isInteractive={isInteractive && isIntroComplete}
       />
 
       {/* Minimal Navbar with mix-blend-mode: difference */}
@@ -82,13 +90,13 @@ export default function App() {
         onInteractiveReady={handleInteractiveReady}
       />
 
-      {/* 8-Row Full-Width Editorial Service Menu */}
+      {/* 8-Protocol Full-Width Editorial Service Menu */}
       <ServicesSection />
 
-      {/* Direct Contact Section with Giant Serif Phone Number & Footer */}
+      {/* Direct Contact Section with Giant Phone & Studio Footer */}
       <ContactSection />
 
-      {/* Mobile-first bottom action bar: Call 8660036822 */}
+      {/* Mobile-first bottom action bar: Call 8123543569 */}
       <FloatingMobileCTA />
     </div>
   );
